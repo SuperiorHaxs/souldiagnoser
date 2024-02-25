@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Assistant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center; /* Center-align text */
+	    background: url("download.jpg");
+        }
+        h1, p {
+            text-align: center;
+        }
+        input, select {
+            margin-bottom: 10px;
+        }
+        button {
+            margin-top: 10px;
+        }
+       p{
+           background: url("download.jpg");
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Hello, I'm your Personal Health Assistant</h1>
+
+    <button onclick="startCheckup()">Start Checkup</button>
+
+    <script>
+        class Health {
+            // Common health-related methods can be added here
+        }
+
+        function bmiRange(bmi) {
+            return (bmi - 18.5) / (bmi - 24.9);
+        }
+
+        function bmrRange(bmr) {
+            return (bmr - 18.5) / (bmr - 24.9);
+        }
+
+        function startCheckup() {
+            let status = prompt("How are you doing today? (Good, Bad):").toLowerCase();
+
+            if (status === "good") {
+                let checkup = prompt("That's great to hear! Do you want a checkup? (yes or no)").toLowerCase();
+
+                if (checkup === "yes") {
+                    let name = prompt("What is your name?");
+                    let age = parseInt(prompt(`How old are you, ${name}?`));
+                    let weight = parseFloat(prompt("How much do you weigh? (lbs):"));
+                    let height = parseFloat(prompt("How tall are you? (inches):"));
+                    let gender = prompt("What is your sex? (Male/Female):");
+
+                    let bmi = weight / Math.pow(height, 2) * 703;
+                    console.log(`Your BMI is ${bmi.toFixed(2)}`);
+
+                    let bmr = 0;
+                    if (gender.toLowerCase() === "male") {
+                        bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+                    } else if (gender.toLowerCase() === "female") {
+                        bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+                    }
+                    console.log(`Your BMR is ${bmr.toFixed(2)}`);
+
+                    document.write("<p>Your BMI is " + bmi.toFixed(2) + "</p>");
+                    document.write("<p>Your BMR is " + bmr.toFixed(2) + "</p>");
+
+                    document.write("<p>That's all for your checkup! Have a great healthy day!</p>");
+                } else if (checkup === "no") {
+                    document.write("<p>Have a great healthy day!</p>");
+                } else {
+                    document.write("<p>I'm sorry, I haven't been trained to understand that yet. Try to rerun this chatbot so it can diagnose you better.</p>");
+                }
+            } else if (status === "bad") {
+                let type = prompt("I'm sorry to hear that. Tell me what's the problem? (Mental or Physical):").toLowerCase();
+
+                if (type === "mental") {
+                    class MentalHealth extends Health {
+                        constructor() {
+                            super();
+                            const depression = ["sadness", "irritability", "feeling negative", "feeling worthless", "poor academic performance", "avoidance of others", "anger"];
+                            const eatingDisorders = ["distorted body image", "skipping most meals", "unusual eating habits", "frequent weighing", "extreme weight change", "insomnia", "constipation", "skin rash", "dry skin", "dental cavities", "erosion of tooth enamel", "hyperactivity", "need to exercise"];
+                            const paranoiaSymptoms = ["Easily offended", "Difficult to trust others", "Unable to deal with types of criticism", "Assign harmful meanings to other people's remarks", "Always on the defensive side", "Hostile, aggressive, and argumentative behavior", "Unable to compromise"];
+                            const anxietyDisorderSymptoms = ["Trouble concentrating or making decisions", "Feeling irritable, tense, or restless", "Experiencing nausea or abdominal distress", "Having heart palpitations", "Sweating, trembling, or shaking", "Trouble sleeping", "Having a sense of impending danger, panic, or doom"];
+                            let dCount = 0;
+                            let eCount = 0;
+                            let aCount = 0;
+                            let pCount = 0;
+                            const manyMental = parseInt(prompt("How many symptoms are you feeling: "));
+                            for (let x = 0; x < manyMental; x++) {
+                                const symptom = prompt(`Enter symptom ${x + 1}/${manyMental}:`);
+                                if (depression.includes(symptom)) {
+                                    dCount++;
+                                }
+                                if (eatingDisorders.includes(symptom)) {
+                                    eCount++;
+                                }
+                                if (anxietyDisorderSymptoms.includes(symptom)) {
+                                    aCount++;
+                                }
+                                if (paranoiaSymptoms.includes(symptom)) {
+                                    pCount++;
+                                }
+                            }
+                            if (dCount > eCount && dCount > aCount && dCount > pCount) {
+                                document.write("<p>You are experiencing depression. You are not alone and you can get help from a therapist and certain medications. If you are later diagnosed with severe depression, a combination of psychotherapy and antidepressant might help.</p>");
+                            } else if (eCount > dCount && eCount > aCount && eCount > pCount) {
+                                document.write("<p>You are experiencing eating disorders. Don't worry! You got this! You can treat it with psychotherapy, medical care and monitoring, nutritional counseling, medications, or a combination of these approaches.</p>");
+                            } else if (aCount > dCount && aCount > eCount && aCount > pCount) {
+                                document.write("<p>You are experiencing anxiety disorder. Don't worry! You got this! You can treat it with Psychotherapy, Antidepressants, mindfulness, and relaxation techniques.</p>");
+                            } else if (pCount > dCount && pCount > eCount && pCount > aCount) {
+                                document.write("<p>You are experiencing Paranoia. Don't worry! You got this! You can treat it with getting enough sleep, eating regularly, staying active, and seeking support.</p>");
+                            } else {
+                                document.write("<p>Your symptoms are not in our database. Please contact a professional doctor if the problem persists. If you feel any more symptoms, please rerun the chatbot or consult a professional.</p>");
+                            }
+                        }
+                    }
+
+                    new MentalHealth(); // Instantiate the MentalHealth class
+                } else if (type === "physical") {
+                    class PhysicalHealth extends Health {
+                        constructor() {
+                            super();
+                            const covid = ["fever", "chills", "cough", "shortness of breath", "difficulty breathing", "fatigue", "muscle aches", "body aches", "headache", "new loss of taste", "new loss of smell", "sore throat", "congestion", "runny nose", "nausea", "vomiting", "diarrhea"];
+                            const viralHepatitis = ["fever", "fatigue", "loss of appetite", "nausea vomiting", "abdominal pain", "dark urine", "light-colored stools", "joint pain", "skin"];
+                            const influenza = ["fever", "feeling feverish", "chills", "cough", "sore throat", "runny nose", "stuffy nose", "muscle aches", "body aches", "headaches", "fatigue (tiredness)", "vomiting", "diarrhea"];
+                            const pneumonia = ["cough", "yellow mucus", "bloody mucus", "fever, sweating", "shaking chills", "shortness of breath", "shallow breathing", "sharp chest pain", "stabbing chest pain", "loss of appetite", "low energy", "fatigue", "nausea", "vomiting", "confusion"];
+                            const chickenpox = ["low-grade fever", "feeling tired", "headache", "stomach ache", "skin rash", "small blisters", "scabs after the blisters break", "blotchy skin", "crusty spots"];
+                            const commonCold = ["stuffy", "runny nose", "scratchy throat ", "tickly throat", "sneezing", "watering eyes", "low-grade fever", "sore throat", "mild hacking cough", "achy muscles", "achy bones", "headache", "mild fatigue", "chills", "watery snot"];
+                            const malaria = ["fever", "chills", "sweating", "headache", "nausea", "vomiting", "muscle aches", "fatigue", "diarrhea"];
+                            let c19Count = 0;
+                            let vhCount = 0;
+                            let iCount = 0;
+                            let pCount = 0;
+                            let cpCount = 0;
+                            let ccCount = 0;
+                            let mCount = 0;
+                            const manyPhysical = parseInt(prompt("How many symptoms are you feeling: "));
+                            for (let x = 0; x < manyPhysical; x++) {
+                                const symptomPhysical = prompt(`Enter symptom ${x + 1}/${manyPhysical}:`);
+                                if (covid.includes(symptomPhysical)) {
+                                    c19Count++;
+                                }
+                                if (viralHepatitis.includes(symptomPhysical)) {
+                                    vhCount++;
+                                }
+                                if (influenza.includes(symptomPhysical)) {
+                                    iCount++;
+                                }
+                                if (pneumonia.includes(symptomPhysical)) {
+                                    pCount++;
+                                }
+                                if (chickenpox.includes(symptomPhysical)) {
+                                    cpCount++;
+                                }
+                                if (commonCold.includes(symptomPhysical)) {
+                                    ccCount++;
+                                }
+                                if (malaria.includes(symptomPhysical)) {
+                                    mCount++;
+                                }
+                            }
+                            if (c19Count > vhCount && c19Count > iCount && c19Count > pCount && c19Count > cpCount && c19Count > ccCount && c19Count > mCount) {
+                                document.write("<p>You are experiencing covid-19. Don't worry, you can take antivirals and get tested.</p>");
+                            } else if (vhCount > c19Count && vhCount > iCount && vhCount > pCount && vhCount > cpCount && vhCount > ccCount && vhCount > mCount) {
+                                document.write("<p>You are experiencing viral hepatitis. Don't worry, although there are not any real medical treatments, rest and fluids can help.</p>");
+                            } else if (iCount > vhCount && iCount > c19Count && iCount > pCount && iCount > cpCount && iCount > ccCount && iCount > mCount) {
+                                document.write("<p>You are experiencing Influenza. Don't worry, you can take medicines for fever such as acetaminophen or ibuprofen.</p>");
+                            } else if (pCount > vhCount && pCount > iCount && pCount > c19Count && pCount > cpCount && pCount > ccCount && pCount > mCount) {
+                                document.write("<p>You are experiencing Pneumonia. Don't worry, you can take antibiotics and most people start to feel better after 1-3 days.</p>");
+                            } else if (cpCount > vhCount && cpCount > iCount && cpCount > pCount && cpCount > c19Count && cpCount > ccCount && cpCount > mCount) {
+                                document.write("<p>You are experiencing Chickenpox. Don't worry, just make sure to take plenty of fluids and use cream for itchy skin.</p>");
+                            } else if (ccCount > vhCount && ccCount > iCount && ccCount > pCount && ccCount > cpCount && ccCount > c19Count && ccCount > mCount) {
+                                document.write("<p>You are experiencing Common Cold. Don't worry, drink warm liquids and try to be in a moisturized environment.</p>");
+                            } else if (mCount > vhCount && mCount > iCount && mCount > pCount && mCount > cpCount && mCount > ccCount && mCount > c19Count) {
+                                document.write("<p>You are experiencing Malaria. Don't worry, take chloroquine phosphate and get plenty of rest.</p>");
+                            } else {
+                                document.write("<p>Your symptoms are not in our database. Please contact a professional doctor if the problem persists.If you feel any more symptoms, please rerun the chatbot or consult a professional.</p>");
+                            }
+                        }
+                    }
+
+                    new PhysicalHealth(); // Instantiate the PhysicalHealth class
+                } else {
+                    document.write("<p>I'm sorry, I haven't been trained to understand that yet. Try asking something else.</p>");
+                }
+            } else {
+                document.write("<p>Sorry, I haven't been trained to understand that yet. Try asking something else.</p>");
+            }
+
+            // Warning message about professional help
+            document.write("<p style='color: red;'>Note: This information is not a substitute for professional help and should not be trusted 100%.</p>");
+        }
+    </script>
+
+</body>
+</html>
